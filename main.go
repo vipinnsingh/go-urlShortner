@@ -17,7 +17,7 @@ func main() {
 	// handler := mapHandler(pathToURLs, mux)
 	handler, _ := YAMLHandler(mux)
 
-	err := http.ListenAndServe(":8090", handler)
+	err := http.ListenAndServe(":8000", handler)
 	if err != nil {
 		fmt.Println(err)
 	}

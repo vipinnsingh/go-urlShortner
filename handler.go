@@ -8,13 +8,13 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type config struct {
-	pathToURLs map[string]Map
+type Url struct {
+	Path string `yaml:"path"`
+	Url  string `yaml:"url"`
 }
 
-type Map struct {
-	path string
-	url  string
+type Config struct {
+	Urls []Url
 }
 
 func mapHandler(pathToURLs map[string]string, fallback http.Handler) http.HandlerFunc {
@@ -45,16 +45,13 @@ func YAMLHandler(fallback http.Handler) (http.HandlerFunc, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("config", config)
-	pathMap := make(map[string]string)
-	// pathMap := buildMap(config)
+
+	pathMap := buildMap(config)
 	return mapHandler(pathMap, fallback), nil
 }
 
-func parseYAML(file []byte) (map[string]interface{}, error) {
-	// var config []config
-	fmt.Println("file", string(file))
-	config := make(map[string]interface{})
+func parseYAML(file []byte) (Config, error) {
+	var config Config
 	err := yaml.Unmarshal(file, &config)
 	if err != nil {
 		fmt.Println("error in unmarshalling", err)
@@ -63,8 +60,12 @@ func parseYAML(file []byte) (map[string]interface{}, error) {
 	return config, nil
 }
 
-// func buildMap(config config) map[string]string {
-// 	pathMap := make(map[string]string)
+func buildMap(config Config) map[string]string {
+	pathMap := make(map[string]string)
 
-// 	return
-// }
+	for _, v := range config.Urls {
+		pathMap[v.Path] = v.Url
+	}
+
+	return pathMap
+}
