@@ -9,14 +9,15 @@ func main() {
 
 	mux := defaultMux()
 
-	pathToURLs := map[string]string{
-		"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
-		"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
-	}
+	// pathToURLs := map[string]string{
+	// 	"/urlshort-godoc": "https://godoc.org/github.com/gophercises/urlshort",
+	// 	"/yaml-godoc":     "https://godoc.org/gopkg.in/yaml.v2",
+	// }
 
-	handler := mapHandler(pathToURLs, mux)
+	// handler := mapHandler(pathToURLs, mux)
+	handler, _ := YAMLHandler(mux)
 
-	err := http.ListenAndServe(":8000", handler)
+	err := http.ListenAndServe(":8090", handler)
 	if err != nil {
 		fmt.Println(err)
 	}
